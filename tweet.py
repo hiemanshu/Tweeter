@@ -16,11 +16,13 @@
 import twitter, sys, ConfigParser, os.path
 
 USAGE = '''Usage: tweet.py command
-    update <status>     : Update your twitter status
-    timeline            : Get your user timeline
-    replies             : Get replies
-    friends             : Get list of friends
-    follows             : Get list of people that follow you
+    update <status>                 : Update your twitter status
+    timeline                        : Get your user timeline
+    replies                         : Get replies
+    friends                         : Get list of friends
+    follows                         : Get list of people that follow you
+    direct                          : Get Direct messages sent to you
+    senddirect <username> <text>    : Send Direct message to [username]
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
@@ -79,3 +81,6 @@ if cmp(sys.argv[1],"follows") == 0:
             print ("Screen Name : %s" %k.screen_name)
         else:
             print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+if cmp(sys.argv[1],"senddirect") == 0:
+    dm = api.PostDirectMessage(sys.argv[2],sys.argv[3])
+    print "Message sent to %s" %sys.argv[2]
