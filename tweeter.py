@@ -15,9 +15,12 @@
 
 import twitter, sys, ConfigParser, os.path
 
+__author_ = "mail@theindiangeek.in"
+version = 0.1
+
 USAGE = '''Usage: tweeter.py command
     update <status>                 : Update your twitter status
-    timeline                        : Get your user timeline
+    timeline [username]             : Get your timeline or of username if username is specified
     replies                         : Get replies
     friends                         : Get list of friends
     follows                         : Get list of people that follow you
@@ -47,26 +50,34 @@ accstkn = config.get("Tweet", "accstkn", raw=True)
 accssec = config.get("Tweet", "accssec", raw=True)
 
 api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_key=accstkn, access_token_secret=accssec)
+
 if len(sys.argv) == 1:
     print USAGE
     sys.exit(2);
+
 if cmp(sys.argv[1],"-h") == 0:
     print USAGE 
     sys.exit(2);
+
 if cmp(sys.argv[1],"update") == 0:
     api.PostUpdates(sys.argv[2])
+    print "Your status has been update"
+
 if cmp(sys.argv[1],"timeline") == 0:
-    statues = api.GetUserTimeline()
+    statues = api.GetUserTimeline(sys.argv[2])
     for s in statues:
         print s.text
+
 if cmp(sys.argv[1],"replies") == 0:
     replies = api.GetReplies()
     for l in replies:
         print "From : " + l.user.screen_name +  " \nMessage : %s\n" %l.text 
+
 if cmp(sys.argv[1],"direct") == 0:
     directs = api.GetDirectMessages()
     for h in directs:
-        print ("From : " + h.sender_screen_name + " Message : %s" %h.text)
+        print ("From : " + h.sender_screen_name + "\nMessage : %s\n" %h.text)
+
 if cmp(sys.argv[1],"friends") == 0:
     friends = api.GetFriends()
     for k in friends:
@@ -74,6 +85,7 @@ if cmp(sys.argv[1],"friends") == 0:
             print ("Screen Name : %s" %k.screen_name)
         else:
             print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+
 if cmp(sys.argv[1],"follows") == 0:
     follows = api.GetFollowers()
     for k in follows:
@@ -81,6 +93,7 @@ if cmp(sys.argv[1],"follows") == 0:
             print ("Screen Name : %s" %k.screen_name)
         else:
             print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+
 if cmp(sys.argv[1],"senddirect") == 0:
     dm = api.PostDirectMessage(sys.argv[2],sys.argv[3])
     print "Message sent to %s" %sys.argv[2]
