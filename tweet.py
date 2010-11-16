@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 ###
+### Author : Hiemanshu Sharma <mail@theindiangeek.in>
+###
 ###
 ### tweet.py
 ###
@@ -8,7 +10,8 @@
 ###
 ### TODO: Allow getting searches, add
 ### follow, unfollow, delete, list people you follow
-
+###
+###
 
 import twitter, sys, ConfigParser, os.path
 
@@ -29,13 +32,13 @@ The format for the file is :
     accssec: <Access Token Secret>
 '''
 
-check = os.path.isfile(".tweetrc")
+check = os.path.isfile(os.path.expanduser('~/.tweetrc'))
 if cmp(check,False) == 0:
     print DOCUMENTATION
     sys.exit(2)
 
 config = ConfigParser.ConfigParser()
-config.read(".tweetrc")
+config.read(os.path.expanduser('~/.tweetrc'))
 conskey = config.get("Tweet", "conskey", raw=True)
 conssec = config.get("Tweet", "conssec", raw=True)
 accstkn = config.get("Tweet", "accstkn", raw=True)
