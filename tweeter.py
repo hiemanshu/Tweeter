@@ -4,7 +4,7 @@
 ### Author : Hiemanshu Sharma <mail@theindiangeek.in>
 ###
 ###
-### tweet.py
+### tweeter.py
 ###
 ### Python script to update twitter status
 ###
@@ -15,7 +15,7 @@
 
 import twitter, sys, ConfigParser, os.path
 
-USAGE = '''Usage: tweet.py command
+USAGE = '''Usage: tweeter.py command
     update <status>                 : Update your twitter status
     timeline                        : Get your user timeline
     replies                         : Get replies
