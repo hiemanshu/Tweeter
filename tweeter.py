@@ -35,33 +35,51 @@ The format for the file is :
     conssec: <Consumer Secret>
     accstkn: <Access Token Key>
     accssec: <Access Token Secret>
-'''
 
-check = os.path.isfile(os.path.expanduser('~/.tweetrc'))
-if cmp(check,False) == 0:
-    print DOCUMENTATION
+To add the above keys use add-auth parameter in the format i.e.,
+add-auth <Consumer Key> <Consumer Secret> <Access Token Key> <Access Token Secret>
+You can get the above values by registering your app at http://dev.twitter.com
+'''
+config = ConfigParser.ConfigParser()
+if not config.has_section("Tweet"):
+    config.add_section("Tweet")
+    
+
+if len(sys.argv) == 1:
+    print USAGE
     sys.exit(2)
 
-config = ConfigParser.ConfigParser()
+if cmp(sys.argv[1],"-h") == 0:
+    print USAGE 
+    sys.exit(2)
+
+check = os.path.isfile(os.path.expanduser('~/.tweetrc'))
+# check = os.path.isfile('.tweetrc')
+if cmp(check,False) == 0:
+    if cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) != 6:
+        print sys.argv[1]
+        print DOCUMENTATION
+        sys.exit(2)
+    elif cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) == 6:
+        config.set("Tweet","conskey",sys.argv[2])
+        config.set("Tweet","conssec",sys.argv[3])
+        config.set("Tweet","accstkn",sys.argv[4])
+        config.set("Tweet","accssec",sys.argv[5])
+        config.write(open(os.path.expanduser('~/.tweetrc'),'w'))
+        print "Access keys saved!"
+
 config.read(os.path.expanduser('~/.tweetrc'))
+# config.read('.tweetrc')
 conskey = config.get("Tweet", "conskey", raw=True)
 conssec = config.get("Tweet", "conssec", raw=True)
 accstkn = config.get("Tweet", "accstkn", raw=True)
 accssec = config.get("Tweet", "accssec", raw=True)
 
 api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_key=accstkn, access_token_secret=accssec)
-
-if len(sys.argv) == 1:
-    print USAGE
-    sys.exit(2);
-
-if cmp(sys.argv[1],"-h") == 0:
-    print USAGE 
-    sys.exit(2);
-
+    
 if cmp(sys.argv[1],"update") == 0:
     api.PostUpdates(sys.argv[2])
-    print "Your status has been update"
+    print "Your status has been updated!"
 
 if cmp(sys.argv[1],"timeline") == 0:
     statues = api.GetUserTimeline(sys.argv[2])
