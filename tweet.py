@@ -54,7 +54,7 @@ if cmp(sys.argv[1],"-h") == 0:
     print USAGE 
     sys.exit(2);
 if cmp(sys.argv[1],"update") == 0:
-    api.PostUpdate(sys.argv[2])
+    api.PostUpdates(sys.argv[2])
 if cmp(sys.argv[1],"timeline") == 0:
     statues = api.GetUserTimeline()
     for s in statues:
