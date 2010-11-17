@@ -30,6 +30,9 @@ USAGE = '''Usage: tweeter.py command
     follow <username>                    : Follow [username]
     unfollow <username>                  : Stop following [username]
     createlist <name> [public/private]   : Create a list by the name given with public/private access (It is public by default)
+    dellist <username> <listname>        : Delete listname by [username] if you have access if you want to delete your own list username should be your own id
+    addtolist <username> <listname>      : Subscribe to the list by [username]
+    delfromlist <username> <listname>    : Unsubscribe to the list [listname] by [username]
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
@@ -169,3 +172,24 @@ if cmp(sys.argv[1],"createlist") == 0:
     if len(sys.argv) == 3:
         l = api.CreateList('user',sys.argv[2])
     print "List by the name %s has been created" %sys.argv[2]
+
+if cmp(sys.argv[1],"dellist") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+    api.DestroyList(sys.argv[2],sys.argv[3])
+    print "List by the name %s has been deleted" %sys.argv[3]
+
+if cmp(sys.argv[1],"addtolist") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+    api.CreateSubscription(sys.argv[2],sys.argv[3])
+    print "You are now following the list %s by %s" %(sys.argv[3],sys.argv[2])
+
+if cmp(sys.argv[1],"delfromlist") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+   api.DestroySubscription(sys.argv[2],sys.argv[3])
+   print "You are no longer following the list %s by %s" %(sys.argv[2],sys.argv[3])
