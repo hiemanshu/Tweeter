@@ -26,6 +26,8 @@ USAGE = '''Usage: tweeter.py command
     follows                         : Get list of people that follow you
     direct                          : Get Direct messages sent to you
     senddirect <username> <text>    : Send Direct message to [username]
+    search <text>                   : Search for [text] on twitter
+    follow <username>               : Follow [username]
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
@@ -133,3 +135,18 @@ if cmp(sys.argv[1],"senddirect") == 0:
     message = ' '.join(sys.argv[2:])
     dm = api.PostDirectMessage(sys.argv[2],message)
     print "Message sent to %s" %sys.argv[2]
+
+if cmp(sys.argv[1],"search") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+    search=api.GetSearch(' '.join(sys.argv[2]))
+    for s in search:
+        print "%s : %s" %(s.user.screen_name,s.text)
+
+if cmp(sys.argv[1],"follow") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+    k = api.CreateFriendship(sys.argv[3])
+    print "You are now following " + k.user.screen_name
