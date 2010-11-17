@@ -19,15 +19,17 @@ __author_ = "mail@theindiangeek.in"
 version = 0.1
 
 USAGE = '''Usage: tweeter.py command
-    update <status>                 : Update your twitter status
-    timeline [username]             : Get your timeline or of username if username is specified
-    replies                         : Get replies
-    friends                         : Get list of friends
-    follows                         : Get list of people that follow you
-    direct                          : Get Direct messages sent to you
-    senddirect <username> <text>    : Send Direct message to [username]
-    search <text>                   : Search for [text] on twitter
-    follow <username>               : Follow [username]
+    update <status>                      : Update your twitter status
+    timeline [username]                  : Get your timeline or of username if username is specified
+    replies                              : Get replies
+    friends                              : Get list of friends
+    follows                              : Get list of people that follow you
+    direct                               : Get Direct messages sent to you
+    senddirect <username> <text>         : Send Direct message to [username]
+    search <text>                        : Search for [text] on twitter
+    follow <username>                    : Follow [username]
+    unfollow <username>                  : Stop following [username]
+    createlist <name> [public/private]   : Create a list by the name given with public/private access
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
@@ -150,3 +152,21 @@ if cmp(sys.argv[1],"follow") == 0:
         sys.exit(2)
     k = api.CreateFriendship(sys.argv[3])
     print "You are now following " + k.user.screen_name
+
+if cmp(sys.argv[1],"unfollow") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+    u = api.DestroyFriendship(sys.argv[3])
+    print "You are not following %s anymore" % k.user.screen_name
+
+if cmp(sys.argv[1],"createlist") == 0:
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+    print len(sys.argv)
+    if len(sys.argv) == 4:
+        l = api.CreateList('user',sys.argv[2],mode=sys.argv[3])
+    if len(sys.argv) == 3:
+        l = api.CreateList('user',sys.argv[2])
+    print "List by the name %s has been created" %sys.argv[2]
