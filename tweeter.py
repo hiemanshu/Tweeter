@@ -29,7 +29,7 @@ USAGE = '''Usage: tweeter.py command
     search <text>                        : Search for [text] on twitter
     follow <username>                    : Follow [username]
     unfollow <username>                  : Stop following [username]
-    createlist <name> [public/private]   : Create a list by the name given with public/private access
+    createlist <name> [public/private]   : Create a list by the name given with public/private access (It is public by default)
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
@@ -164,7 +164,6 @@ if cmp(sys.argv[1],"createlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    print len(sys.argv)
     if len(sys.argv) == 4:
         l = api.CreateList('user',sys.argv[2],mode=sys.argv[3])
     if len(sys.argv) == 3:
