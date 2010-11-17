@@ -191,5 +191,5 @@ if cmp(sys.argv[1],"delfromlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-   api.DestroySubscription(sys.argv[2],sys.argv[3])
-   print "You are no longer following the list %s by %s" %(sys.argv[2],sys.argv[3])
+    api.DestroySubscription(sys.argv[2],sys.argv[3])
+    print "You are no longer following the list %s by %s" %(sys.argv[2],sys.argv[3])
