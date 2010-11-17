@@ -88,7 +88,7 @@ api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_ke
 ### Different checks to see what the user wants to do
 
 if cmp(sys.argv[1],"update") == 0:
-    if len(sys.argv) == 1:
+    if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
     status = ' '.join(sys.argv[2:])
@@ -127,8 +127,9 @@ if cmp(sys.argv[1],"follows") == 0:
             print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
 
 if cmp(sys.argv[1],"senddirect") == 0:
-    if len(sys.argv) != 3:
+    if len(sys.argv) < 4:
         print USAGE
         sys.exit(2)
-    dm = api.PostDirectMessage(sys.argv[2],sys.argv[3])
+    message = ' '.join(sys.argv[2:])
+    dm = api.PostDirectMessage(sys.argv[2],message)
     print "Message sent to %s" %sys.argv[2]
