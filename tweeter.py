@@ -40,10 +40,13 @@ To add the above keys use add-auth parameter in the format i.e.,
 add-auth <Consumer Key> <Consumer Secret> <Access Token Key> <Access Token Secret>
 You can get the above values by registering your app at http://dev.twitter.com
 '''
+
+### Check if config file has the section Tweet, if not add it
 config = ConfigParser.ConfigParser()
 if not config.has_section("Tweet"):
     config.add_section("Tweet")
     
+### Print Usage if no arguments have been supplied
 
 if len(sys.argv) == 1:
     print USAGE
@@ -53,8 +56,10 @@ if cmp(sys.argv[1],"-h") == 0:
     print USAGE 
     sys.exit(2)
 
+### Check if file exists, if it doesn't exist and if user wants to add the keys
+### If user doesn't want to add keys, show Documentation
+
 check = os.path.isfile(os.path.expanduser('~/.tweetrc'))
-# check = os.path.isfile('.tweetrc')
 if cmp(check,False) == 0:
     if cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) != 6:
         print sys.argv[1]
@@ -68,17 +73,26 @@ if cmp(check,False) == 0:
         config.write(open(os.path.expanduser('~/.tweetrc'),'w'))
         print "Access keys saved!"
 
+### Read Keys from file
+
 config.read(os.path.expanduser('~/.tweetrc'))
-# config.read('.tweetrc')
 conskey = config.get("Tweet", "conskey", raw=True)
 conssec = config.get("Tweet", "conssec", raw=True)
 accstkn = config.get("Tweet", "accstkn", raw=True)
 accssec = config.get("Tweet", "accssec", raw=True)
 
+### Create api object to be used
+
 api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_key=accstkn, access_token_secret=accssec)
     
+### Different checks to see what the user wants to do
+
 if cmp(sys.argv[1],"update") == 0:
-    api.PostUpdates(sys.argv[2])
+    if len(sys.argv) == 1:
+        print USAGE
+        sys.exit(2)
+    status = ' '.join(sys.argv[2:])
+    api.PostUpdates(status)
     print "Your status has been updated!"
 
 if cmp(sys.argv[1],"timeline") == 0:
@@ -113,5 +127,8 @@ if cmp(sys.argv[1],"follows") == 0:
             print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
 
 if cmp(sys.argv[1],"senddirect") == 0:
+    if len(sys.argv) != 3:
+        print USAGE
+        sys.exit(2)
     dm = api.PostDirectMessage(sys.argv[2],sys.argv[3])
     print "Message sent to %s" %sys.argv[2]
