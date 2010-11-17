@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 
 ###
-### Author : Hiemanshu Sharma <mail@theindiangeek.in>
 ###
+### Author : Hiemanshu Sharma <mail@theindiangeek.in>
 ###
 ### tweeter.py
 ###
 ### Python script to update twitter status
-###
-### TODO: Allow getting searches, add
-### follow, unfollow, delete, list people you follow
 ###
 ###
 
@@ -48,6 +45,69 @@ add-auth <Consumer Key> <Consumer Secret> <Access Token Key> <Access Token Secre
 You can get the above values by registering your app at http://dev.twitter.com
 '''
 
+def addAuth():
+    if cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) != 6:
+        print sys.argv[1]
+        print DOCUMENTATION
+        sys.exit(2)
+    elif cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) == 6:
+        config.set("Tweet","conskey",sys.argv[2])
+        config.set("Tweet","conssec",sys.argv[3])
+        config.set("Tweet","accstkn",sys.argv[4])
+        config.set("Tweet","accssec",sys.argv[5])
+        config.write(open(os.path.expanduser('~/.tweetrc'),'w'))
+        print "Access keys saved!"
+
+def updateStatus():
+    status = ' '.join(sys.argv[2:])
+    api.PostUpdates(status)
+    print "Your status has been updated!"
+
+def timeline():
+    statues = api.GetUserTimeline(sys.argv[2])
+    for s in statues:
+        print s.text
+
+def replies():
+    replies = api.GetReplies()
+    for l in replies:
+        print "From : " + l.user.screen_name +  " \nMessage : %s\n" %l.text 
+
+def friends():
+    friends = api.GetFriends()
+    for k in friends:
+        if cmp(k.name,k.screen_name) == 0:
+            print ("Screen Name : %s" %k.screen_name)
+        else:
+            print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+
+def follows():
+    follows = api.GetFollowers()
+    for k in follows:
+        if cmp(k.name,k.screen_name) == 0:
+            print ("Screen Name : %s" %k.screen_name)
+        else:
+            print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+
+def direct():
+
+def sendDirect():
+
+def search():
+
+def follow():
+
+def unfollow():
+
+def createList():
+
+def deleteList():
+
+def addToList():
+
+def delFromList():
+
+
 ### Check if config file has the section Tweet, if not add it
 config = ConfigParser.ConfigParser()
 if not config.has_section("Tweet"):
@@ -68,17 +128,7 @@ if cmp(sys.argv[1],"-h") == 0:
 
 check = os.path.isfile(os.path.expanduser('~/.tweetrc'))
 if cmp(check,False) == 0:
-    if cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) != 6:
-        print sys.argv[1]
-        print DOCUMENTATION
-        sys.exit(2)
-    elif cmp(sys.argv[1],"add-auth" == 0) and len(sys.argv) == 6:
-        config.set("Tweet","conskey",sys.argv[2])
-        config.set("Tweet","conssec",sys.argv[3])
-        config.set("Tweet","accstkn",sys.argv[4])
-        config.set("Tweet","accssec",sys.argv[5])
-        config.write(open(os.path.expanduser('~/.tweetrc'),'w'))
-        print "Access keys saved!"
+    addAuth()
 
 ### Read Keys from file
 
@@ -98,19 +148,13 @@ if cmp(sys.argv[1],"update") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    status = ' '.join(sys.argv[2:])
-    api.PostUpdates(status)
-    print "Your status has been updated!"
+    updateStatus()
 
 if cmp(sys.argv[1],"timeline") == 0:
-    statues = api.GetUserTimeline(sys.argv[2])
-    for s in statues:
-        print s.text
+    timeline()
 
 if cmp(sys.argv[1],"replies") == 0:
-    replies = api.GetReplies()
-    for l in replies:
-        print "From : " + l.user.screen_name +  " \nMessage : %s\n" %l.text 
+    replies()
 
 if cmp(sys.argv[1],"direct") == 0:
     directs = api.GetDirectMessages()
@@ -118,20 +162,10 @@ if cmp(sys.argv[1],"direct") == 0:
         print ("From : " + h.sender_screen_name + "\nMessage : %s\n" %h.text)
 
 if cmp(sys.argv[1],"friends") == 0:
-    friends = api.GetFriends()
-    for k in friends:
-        if cmp(k.name,k.screen_name) == 0:
-            print ("Screen Name : %s" %k.screen_name)
-        else:
-            print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+    friends()
 
 if cmp(sys.argv[1],"follows") == 0:
-    follows = api.GetFollowers()
-    for k in follows:
-        if cmp(k.name,k.screen_name) == 0:
-            print ("Screen Name : %s" %k.screen_name)
-        else:
-            print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
+    follows()
 
 if cmp(sys.argv[1],"senddirect") == 0:
     if len(sys.argv) < 4:
