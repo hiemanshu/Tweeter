@@ -1,0 +1,7 @@
+
+Tweeter
+Author : mail@theindiangeek.in
+
+Tweeter uses python-twitter library. It is only compatible with python-twitter version above 0.6. Get the version from the mercurial repo.
+You need a Consumer Key and Secret pair and Access Token Key and Token Secret Pair that can be got from http://dev.twitter.com. Create a new app by any name for the access keys. You will need to use your access keys till I figure out a way to hit them. You can then use the add-auth command to add them to your config file.
+If you find any error please report back to me.
