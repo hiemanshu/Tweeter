@@ -58,8 +58,7 @@ def addAuth():
         config.write(open(os.path.expanduser('~/.tweetrc'),'w'))
         print "Access keys saved!"
 
-def updateStatus():
-    status = ' '.join(sys.argv[2:])
+def updateStatus(status):
     api.PostUpdates(status)
     print "Your status has been updated!"
 
@@ -94,42 +93,42 @@ def direct():
     for h in directs:
         print ("From : " + h.sender_screen_name + "\nMessage : %s\n" %h.text)
 
-def sendDirect():
-    message = ' '.join(sys.argv[2:])
-    dm = api.PostDirectMessage(sys.argv[2],message)
-    print "Message sent to %s" %sys.argv[2]
+def sendDirect(user,message):
+    dm = api.PostDirectMessage(user,message)
+    print "Message sent to %s" %user
 
-def search():
-    search=api.GetSearch(' '.join(sys.argv[2]))
+def search(text):
+    search=api.GetSearch(text)
     for s in search:
         print "%s : %s" %(s.user.screen_name,s.text)
 
-def follow():
-    k = api.CreateFriendship(sys.argv[3])
+def follow(user):
+    k = api.CreateFriendship(user)
     print "You are now following " + k.user.screen_name
 
-def unfollow():
-    u = api.DestroyFriendship(sys.argv[3])
+def unfollow(user):
+    u = api.DestroyFriendship(user)
     print "You are not following %s anymore" % k.user.screen_name
 
-def createList():
-    if len(sys.argv) == 4:
-        l = api.CreateList('user',sys.argv[2],mode=sys.argv[3])
-    if len(sys.argv) == 3:
-        l = api.CreateList('user',sys.argv[2])
-    print "List by the name %s has been created" %sys.argv[2]
+def createList1(name,mode):
+    l = api.CreateList('user',name,mode)
+    print "List by the name %s has been created" %name
 
-def deleteList():
-    api.DestroyList(sys.argv[2],sys.argv[3])
-    print "List by the name %s has been deleted" %sys.argv[3]
+def createList2(name)
+    l = api.CreateList('user',name)
+    print "List by the name %s has been created" %name
 
-def addToList():
-    api.CreateSubscription(sys.argv[2],sys.argv[3])
-    print "You are now following the list %s by %s" %(sys.argv[3],sys.argv[2])
+def deleteList(user,list):
+    api.DestroyList(user,list)
+    print "List by the name %s has been deleted" %list
 
-def delFromList():
-    api.DestroySubscription(sys.argv[2],sys.argv[3])
-    print "You are no longer following the list %s by %s" %(sys.argv[2],sys.argv[3])
+def addToList(user,list):
+    api.CreateSubscription(user,list)
+    print "You are now following the list %s by %s" %(user,list)
+
+def delFromList(user,list):
+    api.DestroySubscription(user,list)
+    print "You are no longer following the list %s by %s" %(user,list)
 
 ### Check if config file has the section Tweet, if not add it
 config = ConfigParser.ConfigParser()
@@ -171,7 +170,8 @@ if cmp(sys.argv[1],"update") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    updateStatus()
+    status=' '.join(sys.argv[2:])
+    updateStatus(status)
 
 if cmp(sys.argv[1],"timeline") == 0:
     timeline()
@@ -192,46 +192,50 @@ if cmp(sys.argv[1],"senddirect") == 0:
     if len(sys.argv) < 4:
         print USAGE
         sys.exit(2)
-    sendDirect()
+    msg=' '.join(sys.argv[3:])
+    sendDirect(sys.argv[2],msg)
 
 if cmp(sys.argv[1],"search") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    search()
+    search(sys.argv[2])
 
 if cmp(sys.argv[1],"follow") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    follow()
+    follow(sys.argv[2])
 
 if cmp(sys.argv[1],"unfollow") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    unfollow()
+    unfollow(sys.arg[2])
 
 if cmp(sys.argv[1],"createlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    createList()
+    if len(sys.argv) == 4:
+        createList1(sys.argv[2],sys.argv[3])
+    if len(sys.argv) == 3:
+        createList2(sys.argv[2])
 
 if cmp(sys.argv[1],"dellist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    deleteList()
+    deleteList(sys.argv[2],sys.argv[3])
 
 if cmp(sys.argv[1],"addtolist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    addToList()
+    addToList(sys.argv[2],sys.argv[3])
 
 if cmp(sys.argv[1],"delfromlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    delFromList()
+    delFromList(sys.argv[2],sys.argv[3])
