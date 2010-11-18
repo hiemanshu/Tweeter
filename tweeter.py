@@ -12,7 +12,7 @@
 
 import twitter, sys, ConfigParser, os.path
 
-__author_ = "mail@theindiangeek.in"
+__author__ = "mail@theindiangeek.in"
 version = 0.1
 
 USAGE = '''Usage: tweeter.py command
@@ -31,10 +31,11 @@ USAGE = '''Usage: tweeter.py command
     dellist <username> <listname>        : Delete listname by [username] if you have access if you want to delete your own list username should be your own id
     addtolist <username> <listname>      : Subscribe to the list by [username]
     delfromlist <username> <listname>    : Unsubscribe to the list [listname] by [username]
+    get_conversation <status id>         : Fetches the full tweet conversation
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
-The format for the file is : 
+The format for the file is :
     [Tweet]
     conskey: <Consumer Key>
     conssec: <Consumer Secret>
@@ -71,7 +72,7 @@ def timeline():
 def replies():
     replies = api.GetReplies()
     for l in replies:
-        print "From : " + l.user.screen_name +  " \nMessage : %s\n" %l.text 
+        print "From : " + l.user.screen_name +  " \nMessage : %s\n" %l.text
 
 def friends():
     friends = api.GetFriends()
@@ -136,19 +137,32 @@ def delFromList(user,list):
     api.DestroySubscription(user,list)
     print "You are no longer following the list %s by %s" %(user,list)
 
+def get_conversation(status_id):
+    flag = 1
+    tweet_count = 1
+    while flag == 1:
+        status = api.GetStatus(status_id)
+        print ("%s%s")%(tweet_count*"-",status.text)
+        if status.in_reply_to_status_id == None:
+            break
+        else:
+            tweet_count = tweet_count + 1
+            status_id = status.in_reply_to_status_id
+
+def validate_parameters():
+    if len(sys.argv) < 3:
+        print USAGE
+        sys.exit(2)
+
 ### Check if config file has the section Tweet, if not add it
 config = ConfigParser.ConfigParser()
 if not config.has_section("Tweet"):
     config.add_section("Tweet")
-    
-### Print Usage if no arguments have been supplied
 
-if len(sys.argv) == 1:
+### Print Usage if no arguments have been supplied or if -h / --help is an argument
+
+if len(sys.argv) == 1 or sys.argv[1] in ("-h","--help"):
     print USAGE
-    sys.exit(2)
-
-if cmp(sys.argv[1],"-h") == 0:
-    print USAGE 
     sys.exit(2)
 
 ### Check if file exists, if it doesn't exist and if user wants to add the keys
@@ -169,13 +183,11 @@ accssec = config.get("Tweet", "accssec", raw=True)
 ### Create api object to be used
 
 api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_key=accstkn, access_token_secret=accssec)
-    
+
 ### Different checks to see what the user wants to do
 
 if cmp(sys.argv[1],"update") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     status=' '.join(sys.argv[2:])
     updateStatus(status)
 
@@ -190,7 +202,7 @@ if cmp(sys.argv[1],"direct") == 0:
 
 if cmp(sys.argv[1],"favs") == 0:
     favs()
-    
+
 if cmp(sys.argv[1],"friends") == 0:
     friends()
 
@@ -198,28 +210,19 @@ if cmp(sys.argv[1],"follows") == 0:
     follows()
 
 if cmp(sys.argv[1],"senddirect") == 0:
-    if len(sys.argv) < 4:
-        print USAGE
-        sys.exit(2)
-    msg=' '.join(sys.argv[3:])
+    validate_parameters()
     sendDirect(sys.argv[2],msg)
 
 if cmp(sys.argv[1],"search") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     search(sys.argv[2])
 
 if cmp(sys.argv[1],"follow") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     follow(sys.argv[2])
 
 if cmp(sys.argv[1],"unfollow") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     unfollow(sys.arg[2])
 
 if cmp(sys.argv[1],"createlist") == 0:
@@ -232,19 +235,18 @@ if cmp(sys.argv[1],"createlist") == 0:
         createList2(sys.argv[2])
 
 if cmp(sys.argv[1],"dellist") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     deleteList(sys.argv[2],sys.argv[3])
 
 if cmp(sys.argv[1],"addtolist") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     addToList(sys.argv[2],sys.argv[3])
 
 if cmp(sys.argv[1],"delfromlist") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+    validate_parameters()
     delFromList(sys.argv[2],sys.argv[3])
+
+if cmp(sys.argv[1],"get_conversation") == 0:
+    validate_parameters()
+    get_conversation(sys.argv[2])
+
