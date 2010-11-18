@@ -234,4 +234,4 @@ if cmp(sys.argv[1],"delfromlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    deleteFromList()
+    delFromList()
