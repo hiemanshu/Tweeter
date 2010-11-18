@@ -21,6 +21,7 @@ USAGE = '''Usage: tweeter.py command
     replies                              : Get replies
     friends                              : Get list of friends
     follows                              : Get list of people that follow you
+    favs                                 : Get list of your favourited tweets
     direct                               : Get Direct messages sent to you
     senddirect <username> <text>         : Send Direct message to [username]
     search <text>                        : Search for [text] on twitter
@@ -93,6 +94,11 @@ def direct():
     for h in directs:
         print ("From : " + h.sender_screen_name + "\nMessage : %s\n" %h.text)
 
+def favs():
+    favs = api.GetFavorites()
+    for f in favs:
+        print ("Tweet : %s by: %s(@%s)\n" %(f.text, f.user.name, f.user.screen_name))
+
 def sendDirect(user,message):
     dm = api.PostDirectMessage(user,message)
     print "Message sent to %s" %user
@@ -114,7 +120,7 @@ def createList1(name,mode):
     l = api.CreateList('user',name,mode)
     print "List by the name %s has been created" %name
 
-def createList2(name)
+def createList2(name):
     l = api.CreateList('user',name)
     print "List by the name %s has been created" %name
 
@@ -182,6 +188,9 @@ if cmp(sys.argv[1],"replies") == 0:
 if cmp(sys.argv[1],"direct") == 0:
     direct()
 
+if cmp(sys.argv[1],"favs") == 0:
+    favs()
+    
 if cmp(sys.argv[1],"friends") == 0:
     friends()
 
