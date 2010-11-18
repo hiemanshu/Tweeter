@@ -90,23 +90,46 @@ def follows():
             print ("Real Name :" + k.name +"        Screen Name: %s" %k.screen_name)
 
 def direct():
+    directs = api.GetDirectMessages()
+    for h in directs:
+        print ("From : " + h.sender_screen_name + "\nMessage : %s\n" %h.text)
 
 def sendDirect():
+    message = ' '.join(sys.argv[2:])
+    dm = api.PostDirectMessage(sys.argv[2],message)
+    print "Message sent to %s" %sys.argv[2]
 
 def search():
+    search=api.GetSearch(' '.join(sys.argv[2]))
+    for s in search:
+        print "%s : %s" %(s.user.screen_name,s.text)
 
 def follow():
+    k = api.CreateFriendship(sys.argv[3])
+    print "You are now following " + k.user.screen_name
 
 def unfollow():
+    u = api.DestroyFriendship(sys.argv[3])
+    print "You are not following %s anymore" % k.user.screen_name
 
 def createList():
+    if len(sys.argv) == 4:
+        l = api.CreateList('user',sys.argv[2],mode=sys.argv[3])
+    if len(sys.argv) == 3:
+        l = api.CreateList('user',sys.argv[2])
+    print "List by the name %s has been created" %sys.argv[2]
 
 def deleteList():
+    api.DestroyList(sys.argv[2],sys.argv[3])
+    print "List by the name %s has been deleted" %sys.argv[3]
 
 def addToList():
+    api.CreateSubscription(sys.argv[2],sys.argv[3])
+    print "You are now following the list %s by %s" %(sys.argv[3],sys.argv[2])
 
 def delFromList():
-
+    api.DestroySubscription(sys.argv[2],sys.argv[3])
+    print "You are no longer following the list %s by %s" %(sys.argv[2],sys.argv[3])
 
 ### Check if config file has the section Tweet, if not add it
 config = ConfigParser.ConfigParser()
@@ -157,9 +180,7 @@ if cmp(sys.argv[1],"replies") == 0:
     replies()
 
 if cmp(sys.argv[1],"direct") == 0:
-    directs = api.GetDirectMessages()
-    for h in directs:
-        print ("From : " + h.sender_screen_name + "\nMessage : %s\n" %h.text)
+    direct()
 
 if cmp(sys.argv[1],"friends") == 0:
     friends()
@@ -171,59 +192,46 @@ if cmp(sys.argv[1],"senddirect") == 0:
     if len(sys.argv) < 4:
         print USAGE
         sys.exit(2)
-    message = ' '.join(sys.argv[2:])
-    dm = api.PostDirectMessage(sys.argv[2],message)
-    print "Message sent to %s" %sys.argv[2]
+    sendDirect()
 
 if cmp(sys.argv[1],"search") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    search=api.GetSearch(' '.join(sys.argv[2]))
-    for s in search:
-        print "%s : %s" %(s.user.screen_name,s.text)
+    search()
 
 if cmp(sys.argv[1],"follow") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    k = api.CreateFriendship(sys.argv[3])
-    print "You are now following " + k.user.screen_name
+    follow()
 
 if cmp(sys.argv[1],"unfollow") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    u = api.DestroyFriendship(sys.argv[3])
-    print "You are not following %s anymore" % k.user.screen_name
+    unfollow()
 
 if cmp(sys.argv[1],"createlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    if len(sys.argv) == 4:
-        l = api.CreateList('user',sys.argv[2],mode=sys.argv[3])
-    if len(sys.argv) == 3:
-        l = api.CreateList('user',sys.argv[2])
-    print "List by the name %s has been created" %sys.argv[2]
+    createList()
 
 if cmp(sys.argv[1],"dellist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    api.DestroyList(sys.argv[2],sys.argv[3])
-    print "List by the name %s has been deleted" %sys.argv[3]
+    deleteList()
 
 if cmp(sys.argv[1],"addtolist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    api.CreateSubscription(sys.argv[2],sys.argv[3])
-    print "You are now following the list %s by %s" %(sys.argv[3],sys.argv[2])
+    addToList()
 
 if cmp(sys.argv[1],"delfromlist") == 0:
     if len(sys.argv) < 3:
         print USAGE
         sys.exit(2)
-    api.DestroySubscription(sys.argv[2],sys.argv[3])
-    print "You are no longer following the list %s by %s" %(sys.argv[2],sys.argv[3])
+    deleteFromList()
