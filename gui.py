@@ -14,9 +14,9 @@ class Ui_Dialog(object):
         accstkn = config.get("Tweet", "accstkn", raw=True)
         accssec = config.get("Tweet", "accssec", raw=True)
         status = self.lineEdit.text()
-        print status
         api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_key=accstkn, access_token_secret=accssec)
         api.PostUpdates(str(status))
+        print "Your status has been updated!"
  
     def setupUi(self, Dialog):
         global lineEdit
