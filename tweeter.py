@@ -31,7 +31,7 @@ USAGE = '''Usage: tweeter.py command
     dellist <username> <listname>        : Delete listname by [username] if you have access if you want to delete your own list username should be your own id
     addtolist <username> <listname>      : Subscribe to the list by [username]
     delfromlist <username> <listname>    : Unsubscribe to the list [listname] by [username]
-    get_conversation <status id>         : Fetches the full tweet conversation
+    getconvo <status id>         : Fetches the full tweet conversation
  '''
 
 DOCUMENTATION = '''The Consumer Key and Secret Pair and Access Token Key and secret pair are stored in ~/.tweetrc
@@ -149,8 +149,8 @@ def get_conversation(status_id):
             tweet_count = tweet_count + 1
             status_id = status.in_reply_to_status_id
 
-def validate_parameters():
-    if len(sys.argv) < 3:
+def validate_parameters(num):
+    if len(sys.argv) < num:
         print USAGE
         sys.exit(2)
 
@@ -187,7 +187,7 @@ api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_ke
 ### Different checks to see what the user wants to do
 
 if cmp(sys.argv[1],"update") == 0:
-    validate_parameters()
+    validate_parameters(3)
     status=' '.join(sys.argv[2:])
     updateStatus(status)
 
@@ -210,43 +210,42 @@ if cmp(sys.argv[1],"follows") == 0:
     follows()
 
 if cmp(sys.argv[1],"senddirect") == 0:
-    validate_parameters()
+    validate_parameters(3)
+    msg = ' '.join(sys.argv[3:]
     sendDirect(sys.argv[2],msg)
 
 if cmp(sys.argv[1],"search") == 0:
-    validate_parameters()
+    validate_parameters(3)
     search(sys.argv[2])
 
 if cmp(sys.argv[1],"follow") == 0:
-    validate_parameters()
+    validate_parameters(3)
     follow(sys.argv[2])
 
 if cmp(sys.argv[1],"unfollow") == 0:
-    validate_parameters()
+    validate_parameters(3)
     unfollow(sys.arg[2])
 
 if cmp(sys.argv[1],"createlist") == 0:
-    if len(sys.argv) < 3:
-        print USAGE
-        sys.exit(2)
+   vaildate_parameters(3) 
     if len(sys.argv) == 4:
         createList1(sys.argv[2],sys.argv[3])
     if len(sys.argv) == 3:
         createList2(sys.argv[2])
 
 if cmp(sys.argv[1],"dellist") == 0:
-    validate_parameters()
+    validate_parameters(4)
     deleteList(sys.argv[2],sys.argv[3])
 
 if cmp(sys.argv[1],"addtolist") == 0:
-    validate_parameters()
+    validate_parameters(4)
     addToList(sys.argv[2],sys.argv[3])
 
 if cmp(sys.argv[1],"delfromlist") == 0:
-    validate_parameters()
+    validate_parameters(4)
     delFromList(sys.argv[2],sys.argv[3])
 
-if cmp(sys.argv[1],"get_conversation") == 0:
-    validate_parameters()
+if cmp(sys.argv[1],"getconvo") == 0:
+    validate_parameters(3)
     get_conversation(sys.argv[2])
 
