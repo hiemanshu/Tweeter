@@ -16,7 +16,7 @@ class Ui_Dialog(object):
         status = self.lineEdit.text()
         print status
         api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_key=accstkn, access_token_secret=accssec)
-        api.PostUpdates(status)
+        api.PostUpdates(str(status))
  
     def setupUi(self, Dialog):
         global lineEdit
