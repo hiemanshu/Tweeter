@@ -13,7 +13,7 @@
 import twitter, sys, ConfigParser, os.path
 
 __author__ = "mail@theindiangeek.in"
-version = 0.1
+version = 0.1-1
 
 USAGE = '''Usage: tweeter.py command
     update <status>                      : Update your twitter status
@@ -186,66 +186,70 @@ api = twitter.Api(consumer_key=conskey, consumer_secret=conssec, access_token_ke
 
 ### Different checks to see what the user wants to do
 
-if cmp(sys.argv[1],"update") == 0:
-    validate_parameters(3)
-    status=' '.join(sys.argv[2:])
-    updateStatus(status)
+try :
+    if cmp(sys.argv[1],"update") == 0:
+        validate_parameters(3)
+        status=' '.join(sys.argv[2:])
+        updateStatus(status)
 
-if cmp(sys.argv[1],"timeline") == 0:
-    timeline()
+    if cmp(sys.argv[1],"timeline") == 0:
+        timeline()
 
-if cmp(sys.argv[1],"replies") == 0:
-    replies()
+    if cmp(sys.argv[1],"replies") == 0:
+        replies()
 
-if cmp(sys.argv[1],"direct") == 0:
-    direct()
+    if cmp(sys.argv[1],"direct") == 0:
+        direct()
 
-if cmp(sys.argv[1],"favs") == 0:
-    favs()
+    if cmp(sys.argv[1],"favs") == 0:
+        favs()
 
-if cmp(sys.argv[1],"friends") == 0:
-    friends()
+    if cmp(sys.argv[1],"friends") == 0:
+        friends()
 
-if cmp(sys.argv[1],"follows") == 0:
-    follows()
+    if cmp(sys.argv[1],"follows") == 0:
+        follows()
 
-if cmp(sys.argv[1],"senddirect") == 0:
-    validate_parameters(3)
-    msg = ' '.join(sys.argv[3:]
-    sendDirect(sys.argv[2],msg)
+    if cmp(sys.argv[1],"senddirect") == 0:
+        validate_parameters(3)
+        msg = ' '.join(sys.argv[3:])
+        sendDirect(sys.argv[2],msg)
 
-if cmp(sys.argv[1],"search") == 0:
-    validate_parameters(3)
-    search(sys.argv[2])
+    if cmp(sys.argv[1],"search") == 0:
+        validate_parameters(3)
+        search(sys.argv[2])
 
-if cmp(sys.argv[1],"follow") == 0:
-    validate_parameters(3)
-    follow(sys.argv[2])
+    if cmp(sys.argv[1],"follow") == 0:
+        validate_parameters(3)
+        follow(sys.argv[2])
 
-if cmp(sys.argv[1],"unfollow") == 0:
-    validate_parameters(3)
-    unfollow(sys.arg[2])
+    if cmp(sys.argv[1],"unfollow") == 0:
+        validate_parameters(3)
+        unfollow(sys.arg[2])
 
-if cmp(sys.argv[1],"createlist") == 0:
-   vaildate_parameters(3) 
-    if len(sys.argv) == 4:
-        createList1(sys.argv[2],sys.argv[3])
-    if len(sys.argv) == 3:
-        createList2(sys.argv[2])
+    if cmp(sys.argv[1],"createlist") == 0:
+        vaildate_parameters(3) 
+        if len(sys.argv) == 4:
+            createList1(sys.argv[2],sys.argv[3])
+        if len(sys.argv) == 3:
+            createList2(sys.argv[2])
 
-if cmp(sys.argv[1],"dellist") == 0:
-    validate_parameters(4)
-    deleteList(sys.argv[2],sys.argv[3])
+    if cmp(sys.argv[1],"dellist") == 0:
+        validate_parameters(4)
+        deleteList(sys.argv[2],sys.argv[3])
 
-if cmp(sys.argv[1],"addtolist") == 0:
-    validate_parameters(4)
-    addToList(sys.argv[2],sys.argv[3])
+    if cmp(sys.argv[1],"addtolist") == 0:
+        validate_parameters(4)
+        addToList(sys.argv[2],sys.argv[3])
 
-if cmp(sys.argv[1],"delfromlist") == 0:
-    validate_parameters(4)
-    delFromList(sys.argv[2],sys.argv[3])
+    if cmp(sys.argv[1],"delfromlist") == 0:
+        validate_parameters(4)
+        delFromList(sys.argv[2],sys.argv[3])
 
-if cmp(sys.argv[1],"getconvo") == 0:
-    validate_parameters(3)
-    get_conversation(sys.argv[2])
+    if cmp(sys.argv[1],"getconvo") == 0:
+        validate_parameters(3)
+        get_conversation(sys.argv[2])
 
+
+except :
+    print "Looks like something has gone wrong. Please check your internet connection and try again or please send an email to %s" % __author__
