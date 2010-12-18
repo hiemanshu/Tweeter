@@ -10,10 +10,10 @@
 ###
 ###
 
-import twitter, sys, ConfigParser, os.path
+import twitter, sys, ConfigParser, os.path, traceback
 
-__author__ = "mail@theindiangeek.in"
-version = 0.1-1
+__author__ = "Hiemanshu Sharma <mail@theindiangeek.in>"
+version = 0.1-2
 
 USAGE = '''Usage: tweeter.py command
     update <status>                      : Update your twitter status
@@ -62,7 +62,15 @@ def addAuth():
 
 def updateStatus(status):
     api.PostUpdates(status)
-    print "Your status has been updated!"
+    print "Your status has been succesfully update"
+
+def lengthCheck(status):
+    if len(status) > 140:
+        choice = raw_input("Your status is greater than 140 words, and will be split into multiple tweets. Do you want to continue (yes/no)? ")
+        if cmp(choice,"yes") == 0 :
+            updateStatus(status)
+        if cmp(choice,"no") == 0 :
+            print "Your status has not been updated."
 
 def timeline():
     statues = api.GetUserTimeline(sys.argv[2])
@@ -190,7 +198,7 @@ try :
     if cmp(sys.argv[1],"update") == 0:
         validate_parameters(3)
         status=' '.join(sys.argv[2:])
-        updateStatus(status)
+        lengthCheck(status)
 
     if cmp(sys.argv[1],"timeline") == 0:
         timeline()
@@ -253,3 +261,4 @@ try :
 
 except :
     print "Looks like something has gone wrong. Please check your internet connection and try again or please send an email to %s" % __author__
+    traceback.print_exc()
