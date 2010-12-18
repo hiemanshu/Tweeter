@@ -260,5 +260,5 @@ try :
 
 
 except :
-    print "Looks like something has gone wrong. Please check your internet connection and try again or please send an email to %s" % __author__
-    traceback.print_exc()
+    print "Looks like something has gone wrong. Please check your internet connection and try again, or please email me at %s with the tweeter.log file as an attachment" % __author__
+    traceback.print_exc(file=open("tweeter.log","a"))
