@@ -13,7 +13,7 @@
 import twitter, sys, ConfigParser, os.path, traceback
 
 __author__ = "Hiemanshu Sharma <mail@theindiangeek.in>"
-version = 0.1-2
+version = 0.1-3
 
 USAGE = '''Usage: tweeter.py command
     update <status>                      : Update your twitter status
