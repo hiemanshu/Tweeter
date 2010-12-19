@@ -68,9 +68,12 @@ def lengthCheck(status):
     if len(status) > 140:
         choice = raw_input("Your status is greater than 140 words, and will be split into multiple tweets. Do you want to continue (yes/no)? ")
         if cmp(choice,"yes") == 0 :
+            print choice
             updateStatus(status)
         if cmp(choice,"no") == 0 :
             print "Your status has not been updated."
+    else:
+        updateStatus(status)
 
 def timeline():
     statues = api.GetUserTimeline(sys.argv[2])
@@ -160,7 +163,7 @@ def get_conversation(status_id):
 def validate_parameters(num):
     if len(sys.argv) < num:
         print USAGE
-        sys.exit(2)
+        sys.exit()
 
 ### Check if config file has the section Tweet, if not add it
 config = ConfigParser.ConfigParser()
@@ -262,3 +265,4 @@ try :
 except :
     print "Looks like something has gone wrong. Please check your internet connection and try again, or please email me at %s with the tweeter.log file as an attachment" % __author__
     traceback.print_exc(file=open("tweeter.log","a"))
+
